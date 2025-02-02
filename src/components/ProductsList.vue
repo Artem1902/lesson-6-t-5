@@ -41,7 +41,8 @@ export default {
     <products-filters
         v-model:sellers='productSellers'
         v-model:brands='productBrands'
-        :notebooksList='notebooksList'></products-filters>
+        :notebooksList='notebooksList'
+    :filteredNotebooksList = 'filteredNotebooksList'></products-filters>
     <div class="products__container">
       <div class="products__cards">
 

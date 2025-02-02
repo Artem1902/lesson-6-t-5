@@ -14,6 +14,10 @@ export default {
       type: Array,
       default: () => []
     },
+    filteredNotebooksList: {
+      type: Array,
+      default: () => []
+    }
   },
   data() {
     return {
@@ -54,21 +58,21 @@ export default {
       return [...new Set(this.notebooksList.map(el => el.brand))];
     },
 
-searchedUniqueBrands(){
-  if (this.searchBrand) {
-    return this.uniqueBrands.filter(brand => this.isBrandAccepted(brand))
-  }
-  return this.uniqueBrands
-},
+    searchedUniqueBrands() {
+      if (this.searchBrand) {
+        return this.uniqueBrands.filter(brand => this.isBrandAccepted(brand))
+      }
+      return this.uniqueBrands
+    },
     qntyProductsRoz() {
-      return this.notebooksList.filter(el => el.seller === 'rozetka').length
+      return this.filteredNotebooksList.filter(el => el.seller === 'rozetka').length
     },
     qntyProductsOther() {
-      return this.notebooksList.filter(el => el.seller !== 'rozetka').length
+      return this.filteredNotebooksList.filter(el => el.seller !== 'rozetka').length
     },
     brandCounts() {
-      return this.uniqueBrands.reduce((acc, brand) => {
-        acc[brand] = this.notebooksList.filter(el => el.brand === brand).length;
+      return this.searchedUniqueBrands.reduce((acc, brand) => {
+        acc[brand] = this.filteredNotebooksList.filter(el => el.brand === brand).length;
         return acc;
       }, {});
     }
@@ -107,7 +111,9 @@ searchedUniqueBrands(){
              :value="brand"
              v-model="checkedBrandValue"/>
       <label class="label" :for="brand">
-        {{ brand.charAt(0).toUpperCase() + brand.slice(1) }}</label>
+        {{
+          brand.charAt(0).toUpperCase() + brand.slice(1)
+        }}</label>
       <span>{{ brandCounts[brand] }}</span>
     </div>
   </div>
