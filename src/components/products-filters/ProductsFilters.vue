@@ -6,10 +6,12 @@ export default {
       type: Array,
       default: () => []
     },
+    sellersModifiers: {default: () => ({})},
     brands: {
       type: Array,
       default: () => []
     },
+    brandsModifiers: {default: () => ({})},
     notebooksList: {
       type: Array,
       default: () => []
@@ -21,7 +23,7 @@ export default {
   },
   data() {
     return {
-      searchBrand: null
+      searchBrand: null,
     }
   },
   computed: {
@@ -75,6 +77,12 @@ export default {
         acc[brand] = this.filteredNotebooksList.filter(el => el.brand === brand).length;
         return acc;
       }, {});
+    },
+    sellerSectionBorder() {
+      return this.sellersModifiers.check && this.sellers.length === 0;
+    },
+    brandSectionBorder() {
+      return this.brandsModifiers.check && this.brands.length === 0;
     }
   },
   methods: {
@@ -87,34 +95,42 @@ export default {
 
 <template>
   <div class="container">
-    <h3 class="title">Продавець</h3>
-    <div class="filters">
-      <input type="checkbox" id="rozetka" value="rozetka"
-             v-model="checkedSellerValue"/>
-      <label class="label" for="rozetka">Rozetka</label>
-      <span>{{ qntyProductsRoz }}</span>
+    <div class="section" :class="{border: sellerSectionBorder}">
+      <h3 class="title">Продавець</h3>
+      <div class="filters">
+        <input type="checkbox" id="rozetka" value="rozetka"
+               v-model="checkedSellerValue"/>
+        <label class="label" for="rozetka">Rozetka</label>
+        <span>{{ qntyProductsRoz }}</span>
+      </div>
+      <div class="filters">
+        <input type="checkbox" id="seller" value="seller"
+               v-model="checkedSellerValue"/>
+        <label class="label" for="seller">Інші
+          продавці</label>
+        <span>{{ qntyProductsOther }}</span>
+      </div>
     </div>
-    <div class="filters">
-      <input type="checkbox" id="seller" value="seller"
-             v-model="checkedSellerValue"/>
-      <label class="label" for="seller">Інші
-        продавці</label>
-      <span>{{ qntyProductsOther }}</span>
+    <div class="section">
+      <h3 class="title">Бренд</h3>
+      <input type='text' placeholder="Пошук" class="input"
+             v-model.trim="searchBrand"/>
     </div>
-    <h3 class="title">Бренд</h3>
-    <input type='text' placeholder="Пошук" class="input"
-           v-model.trim="searchBrand"/>
-    <h3 class="title">Алфавітний вказівник</h3>
-    <div v-for="(brand, index) in searchedUniqueBrands"
-         :key='index' class="filters">
-      <input type="checkbox" :id="brand"
-             :value="brand"
-             v-model="checkedBrandValue"/>
-      <label class="label" :for="brand">
-        {{
-          brand.charAt(0).toUpperCase() + brand.slice(1)
-        }}</label>
-      <span>{{ brandCounts[brand] }}</span>
+    <div class="section" :class="{border: brandSectionBorder}">
+      <h3 class="title">
+        Алфавітний
+        вказівник</h3>
+      <div v-for="(brand, index) in searchedUniqueBrands"
+           :key='index' class="filters">
+        <input type="checkbox" :id="brand"
+               :value="brand"
+               v-model="checkedBrandValue"/>
+        <label class="label" :for="brand">
+          {{
+            brand.charAt(0).toUpperCase() + brand.slice(1)
+          }}</label>
+        <span>{{ brandCounts[brand] }}</span>
+      </div>
     </div>
   </div>
 
@@ -126,6 +142,13 @@ export default {
   display: flex;
   flex-direction: column;
   row-gap: 20px;
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 10px;
 }
 
 .filters {
@@ -149,5 +172,10 @@ export default {
   border: 1px solid #3c4242;
   padding: 16px 20px;
   width: 80%;
+}
+
+.border {
+  border: 1px solid green;
+  border-radius: 8px;
 }
 </style>

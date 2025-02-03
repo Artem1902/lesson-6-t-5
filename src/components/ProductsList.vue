@@ -39,8 +39,8 @@ export default {
 <template>
   <div class="wrapper">
     <products-filters
-        v-model:sellers='productSellers'
-        v-model:brands='productBrands'
+        v-model:sellers.check='productSellers'
+        v-model:brands.check='productBrands'
         :notebooksList='notebooksList'
     :filteredNotebooksList = 'filteredNotebooksList'></products-filters>
     <div class="products__container">
